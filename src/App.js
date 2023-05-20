@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import GuardRoute from "./components/GuardRoute";
+
+import "upkit/dist/style.min.css";
+
+import Home from "./pages/Home";
+import Jobs from "./pages/Jobs";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
+import RegisterSuccess from "./pages/RegisterSuccess";
+
+import DetailJob from "./pages/DetailJob";
+
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./app/store";
+import { listen } from "./app/listener";
 
 function App() {
+  React.useEffect(() => {
+    listen();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+
+          <Route path="/register/berhasil" component={RegisterSuccess} />
+          <Route path="/register" component={Register} />
+
+          <GuardRoute path="/logout">
+            <Logout />
+          </GuardRoute>
+
+          <GuardRoute path="/job/:job_id">
+            <DetailJob />
+          </GuardRoute>
+
+          <Route path="/login" component={Login} />
+          <Route path="/" component={Home} exact />
+
+          <Route path="/jobs" component={Jobs} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
