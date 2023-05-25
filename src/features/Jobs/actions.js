@@ -4,7 +4,7 @@ import {
   START_FETCHING_JOB,
   SUCCESS_FETCHING_JOB,
   ERROR_FETCHING_JOB,
-  SET_PAGE,
+  SET_PER_PAGE,
   SET_KEYWORD,
   PREV_PAGE,
   NEXT_PAGE,
@@ -12,28 +12,28 @@ import {
 
 import { jobs } from "../../api/job";
 
-let debounceFetchJobs = debounce(jobs, 2000);
+let debounceFetchJobs = debounce(jobs, 1000);
 
 export const fetchJobs = () => {
   return async (dispatch, getState) => {
     dispatch(startFetchingJobs());
 
     let perPage = getState().jobs.perPage || 6;
-    let currentPage = getState().jobs.currentPage || 1;
+    let page = getState().jobs.page || 1;
     let keyword = getState().jobs.keyword || "";
 
     const params = {
-      limit: perPage,
-      skip: currentPage * perPage - perPage,
-      query: keyword,
+      perPage,
+      page,
+      // jobName: {
+      //   like: keyword
+      // }
     };
 
     try {
-      let {
-        data: { data, count },
-      } = await debounceFetchJobs(params);
+      let { data } = await debounceFetchJobs(params);
 
-      dispatch(successFetchingJobs({ data, count }));
+      dispatch(successFetchingJobs(data));
     } catch (err) {
       dispatch(errorFetchingJobs());
     }
@@ -45,10 +45,10 @@ export const startFetchingJobs = () => {
   };
 };
 
-export const successFetchingJobs = (payload) => {
+export const successFetchingJobs = (data) => {
   return {
     type: SUCCESS_FETCHING_JOB,
-    ...payload,
+    data: data.data,
   };
 };
 
@@ -58,10 +58,10 @@ export const errorFetchingJobs = () => {
   };
 };
 
-export const setPage = (number = 1) => {
+export const setPerPage = (number = 1) => {
   return {
-    type: SET_PAGE,
-    currentPage: number,
+    type: SET_PER_PAGE,
+    page: number,
   };
 };
 

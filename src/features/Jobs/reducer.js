@@ -2,7 +2,7 @@ import {
   START_FETCHING_JOB,
   ERROR_FETCHING_JOB,
   SUCCESS_FETCHING_JOB,
-  SET_PAGE,
+  SET_PER_PAGE,
   SET_KEYWORD,
   NEXT_PAGE,
   PREV_PAGE,
@@ -17,38 +17,48 @@ const statusList = {
 
 const initialState = {
   data: [],
-  currentPage: 1,
-  totalItems: 0,
+  page: 1,
   perPage: 6,
+  total: 0,
   keyword: "",
   status: statusList.idle,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    // TODO FETCH JOB DATA
     case START_FETCHING_JOB:
-      return { ...state, status: statusList.process, data: [] };
+      return {
+        ...state,
+        status: statusList.process,
+        data: [],
+      };
 
     case SUCCESS_FETCHING_JOB:
       return {
         ...state,
-        data: action.data,
-        totalItems: action.count,
+        data: action.data.data,
+        total: action.data.total,
         status: statusList.success,
       };
 
-    case SET_PAGE:
-      return { ...state, currentPage: action.currentPage };
+    case SET_PER_PAGE:
+      return { ...state, page: action.page };
 
     case SET_KEYWORD:
-      return { ...state, keyword: action.keyword, category: "" };
+      return {
+        ...state,
+        keyword: action.keyword,
+        jobName: {
+          like: action.keyword
+        },
+        page: 1
+      };
 
     case NEXT_PAGE:
-      return { ...state, currentPage: state.currentPage + 1 };
+      return { ...state, page: state.page + 1 };
 
     case PREV_PAGE:
-      return { ...state, currentPage: state.currentPage - 1 };
+      return { ...state, page: state.page - 1 };
 
     case ERROR_FETCHING_JOB:
       return { ...state, status: statusList.error };
