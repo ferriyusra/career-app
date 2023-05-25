@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import ClipLoader from "react-spinners/ClipLoader";
 import { config } from "../../config";
 import MdcBriefcaseSearch from "@meronex/icons/mdc/MdcBriefcaseSearch";
 import {
   fetchJobs,
-  setPage,
+  setPerPage,
   setKeyword,
   goToNextPage,
   goToPrevPage,
@@ -15,15 +14,27 @@ import {
 
 import Footer from "../../components/Footer";
 
-import { Pagination, InputText, ButtonCircle, CardInfo } from "upkit";
+import { Pagination, InputText, ButtonCircle } from "upkit";
+import { Avatar, Card, Skeleton } from 'antd';
 
 export default function Jobs() {
+
+  const [loading, setLoading] = useState(true);
+
   let dispatch = useDispatch();
   let jobs = useSelector((state) => state.jobs);
 
-  React.useEffect(() => {
-    dispatch(fetchJobs());
-  }, [dispatch, jobs.currentPage, jobs.keyword]);
+  useEffect(() => {
+    dispatch(fetchJobs())
+  }, [dispatch, jobs.page]);
+
+  console.log(jobs)
+
+  useEffect(() => {
+    if (jobs.status === "success") {
+      setLoading(false);
+    }
+  }, [jobs.status]);
 
   return (
     <>
@@ -60,123 +71,83 @@ export default function Jobs() {
           <div>
             {" "}
             <div className="text-lg font-bold text-left text-black-400 ml-2">
-              Jumlah Lowongan yang tersedia : {jobs.totalItems}
+              Jumlah Lowongan yang tersedia : {jobs.total}
             </div>
             <div className="grid items-center justify-center h-full border border-gray-400 divide-y divide-gray-400 lg:divide-y-0 md:divide-x md:grid-cols-12 rounded-3xl mt-5">
-              {jobs.status === "process" && !jobs.data.length ? (
-                <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                  <div className="relative flex flex-col items-center justify-center px-20 py-10 group">
-                    <ClipLoader color="#7b6eea" className="" />
-                  </div>
-                </div>
-              ) : null}
-              {jobs.status === "process" && !jobs.data.length ? (
-                <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                  <div className="relative flex flex-col items-center justify-center px-20 py-10 group">
-                    <ClipLoader color="#7b6eea" className="" />
-                  </div>
-                </div>
-              ) : null}
-              {jobs.status === "process" && !jobs.data.length ? (
-                <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                  <div className="relative flex flex-col items-center justify-center px-20 py-10 group">
-                    <ClipLoader color="#7b6eea" className="" />
-                  </div>
-                </div>
-              ) : null}
-              {jobs.data.length === 0 ? (
-                <>
-                  <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                    <CardInfo
-                      title="Tunggu ya data sedang ditampilkan"
-                      message="Apabila pesan ini tetap muncul mungkin data yang dicari tidak ditemukan"
-                    />
-                  </div>
-                  <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                    <CardInfo
-                      title="Tunggu ya data sedang ditampilkan"
-                      message="Apabila pesan ini tetap muncul mungkin data yang dicari tidak ditemukan"
-                    />
-                  </div>
-                  <div className="w-full h-full md:col-span-6 lg:col-span-4">
-                    <CardInfo
-                      title="Tunggu ya data sedang ditampilkan"
-                      message="Apabila pesan ini tetap muncul mungkin data yang dicari tidak ditemukan"
-                    />
-                  </div>
-                </>
-              ) : (
-                jobs.data.map((job, index) => {
-                  return (
-                    <div className="w-full h-full md:col-span-6 lg:col-span-4">
+              {
+                loading || !jobs.data ? (
+                  <>
+                    {[...Array(6)].map((_, index) => (
+                      <div className="w-full h-full md:col-span-6 lg:col-span-4" key={index}>
+                        <div className="relative flex flex-col items-center justify-center px-20 py-10 group">
+                          <Skeleton active />
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  jobs.data.map((job, _index) => (
+                    <div className="w-full h-full md:col-span-6 lg:col-span-4" key={job.id}>
                       <div className="relative flex flex-col items-center justify-center px-20 py-10 group">
-                        <div className="relative">
-                          <Link to={`/jobs/${job._id}`}>
-                            <img
-                              src={`${config.api_host}/upload/company_profile/${job.company_name.company_image_url}`}
-                              alt={index}
-                              style={{ width: 80 + "px" }}
+                        <Card className="w-full">
+                          <div className="flex flex-col items-start">
+                            <Card.Meta
+                              avatar={
+                                <Avatar src={`${config.api_host}/upload/user/${job.companyImage}`} className="w-24 h-24" />
+                              }
                             />
-                          </Link>
-                        </div>
-                        <div className="mt-3 mb-1 text-sm font-semibold text-dark-1">
-                          {job.job_position.length > 25
-                            ? `${job.job_position.substring(0, 25)}...`
-                            : job.job_position}
-                        </div>
-                        <p className="text-base font-medium text-center text-nogrey">
-                          {job.company_name.company_name}
-                        </p>
-                        <p className="text-base font-medium text-center text-nogrey">
-                          {job.job_location}
-                        </p>
-                        <div className="mb-1 text-2md font-bold text-dark-1 font-passion-one mt-4">
-                          <NumberFormat
-                            value={job.job_salaries_min}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"Rp"}
-                          />
-                          -
-                          <NumberFormat
-                            value={job.job_salaries_max}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"Rp"}
-                          />
-                        </div>
-                        <p className="text-sm font-medium text-center text-nogrey mb-7">
-                          {job.minYearsOfExperience} -{" "}
-                          {job.maxYearsOfExperience} Tahun
-                        </p>
-                        <Link
-                          to={`/job/${job._id}`}
-                          className="relative z-30 px-6 py-4 text-center transition duration-300 ease-out bg-white border border-gray-400 rounded-lg text-nogrey group-hover:bg-purple-600 focus:bg-purple-600 focus:ring-2 group-hover:text-white focus:text-black group-hover:border-opacity-0 focus:border-opacity-0"
-                        >
-                          <span className="text-base font-semibold">
-                            Lamar Pekerjaan
-                          </span>
-                        </Link>
+                            <p className="text-base font-medium text-center text-black-800 mt-4">
+                              {job.companyName}
+                            </p>
+                            <div className="mt-3 mb-1 text-sm font-semibold text-dark-1">
+                              {job.jobName.length > 25 ? `${job.jobName.substring(0, 25)}...` : job.jobName}
+                            </div>
+                          </div>
+                          {job.jobIsSalary ? (
+                            <div className="mb-1 text-2md font-bold text-dark-1 font-passion-one mt-4">
+                              <NumberFormat
+                                value={job.jobSalary}
+                                displayType="text"
+                                thousandSeparator={true}
+                                prefix="Rp"
+                              />
+                            </div>
+                          ) : (
+                            <p className="mb-1 text-2md font-bold text-dark-1 font-passion-one mt-4">
+                              Gaji dirahasiakan
+                            </p>
+                          )}
+                          <div className="flex justify-center mt-5">
+                            <div className="w-full md:w-auto">
+                              <Link
+                                to={`/job/${job.id}`}
+                                className="relative z-30 block w-full md:inline-block md:w-auto px-6 py-4 text-center transition duration-300 ease-out bg-white border border-gray-400 rounded-lg text-gray-600 group-hover:bg-purple-600 focus:bg-purple-600 focus:ring-2 group-hover:text-white focus:text-black group-hover:border-opacity-0 focus:border-opacity-0"
+                              >
+                                <span className="text-base font-semibold">Lamar Pekerjaan</span>
+                              </Link>
+                            </div>
+                          </div>
+                        </Card>
                       </div>
                     </div>
-                  );
-                })
-              )}
+                  ))
+                )
+              }
             </div>
             <div className="text-center my-10">
               <Pagination
                 color="indigo"
-                totalItems={jobs.totalItems}
-                page={jobs.currentPage}
+                totalItems={jobs.total}
+                page={jobs.page}
                 perPage={jobs.perPage}
-                onChange={(page) => dispatch(setPage(page))}
+                onChange={(page) => dispatch(setPerPage(page))}
                 onNext={(_) => dispatch(goToNextPage())}
                 onPrev={(_) => dispatch(goToPrevPage())}
               />
             </div>{" "}
           </div>
         </main>
-      </section>
+      </section >
       <Footer />
     </>
   );

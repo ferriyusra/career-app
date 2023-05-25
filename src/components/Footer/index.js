@@ -1,37 +1,37 @@
 export default function Footer() {
   return (
-    <div class="bg-white pt-4 sm:pt-10 lg:pt-12">
-      <footer class="max-w-screen-2xl px-4 md:px-8 mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center border-t border-b gap-4 py-6">
-          <nav class="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 md:gap-6">
+    <div className="bg-white pt-4 sm:pt-10 lg:pt-12">
+      <footer className="max-w-screen-2xl px-4 md:px-8 mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center border-t border-b gap-4 py-6">
+          <nav className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 md:gap-6">
             <a
               href="#"
-              class="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+              className="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
             >
               Tentang
             </a>
             <a
               href="#"
-              class="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+              className="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
             >
               Pertanyaan
             </a>
             <a
               href="#"
-              class="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+              className="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
             >
               Lowongan
             </a>
           </nav>
 
-          <div class="flex gap-4">
+          <div className="flex gap-4">
             <a
               href="#"
               target="_blank"
-              class="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
+              className="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
             >
               <svg
-                class="w-5 h-5"
+                className="w-5 h-5"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -45,10 +45,10 @@ export default function Footer() {
             <a
               href="#"
               target="_blank"
-              class="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
+              className="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
             >
               <svg
-                class="w-5 h-5"
+                className="w-5 h-5"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -62,10 +62,10 @@ export default function Footer() {
             <a
               href="#"
               target="_blank"
-              class="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
+              className="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
             >
               <svg
-                class="w-5 h-5"
+                className="w-5 h-5"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -79,10 +79,10 @@ export default function Footer() {
             <a
               href="#"
               target="_blank"
-              class="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
+              className="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
             >
               <svg
-                class="w-5 h-5"
+                className="w-5 h-5"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -95,7 +95,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div class="text-gray-400 text-sm text-center py-8">© 2022 - .</div>
+        <div className="text-gray-400 text-sm text-center py-8">© 2022 - .</div>
       </footer>
     </div>
   );
