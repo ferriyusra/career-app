@@ -52,7 +52,7 @@ export default function FormApplicants() {
       payload.append("firstName", formHook.firstName);
       payload.append("lastName", formHook.lastName);
       payload.append("email", formHook.email);
-      payload.append("phoneNumber", formHook.phoneNumber);
+      payload.append("phoneNumber", `62${formHook.phoneNumber}`);
       payload.append('resume', resume.raw);
 
       await sendApplicants(jobId, payload);
