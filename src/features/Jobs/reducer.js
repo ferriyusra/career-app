@@ -48,10 +48,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         keyword: action.keyword,
-        jobName: {
-          like: action.keyword
-        },
-        page: 1
       };
 
     case NEXT_PAGE:
