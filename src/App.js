@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import RegisterSuccess from "./pages/RegisterSuccess";
+import SendJobSuccess from "./pages/SendJobSuccess";
 
 import DetailJob from "./pages/DetailJob";
 
@@ -27,6 +28,7 @@ function App() {
       <Router>
         <Switch>
 
+          <Route path="/success-send-applicants" component={SendJobSuccess} />
           <Route path="/register/berhasil" component={RegisterSuccess} />
           <Route path="/register" component={Register} />
 
@@ -34,9 +36,7 @@ function App() {
             <Logout />
           </GuardRoute>
 
-          <GuardRoute path="/job/:job_id">
-            <DetailJob />
-          </GuardRoute>
+          <Route path="/job/:jobId" component={DetailJob} />
 
           <Route path="/login" component={Login} />
           <Route path="/" component={Home} exact />
@@ -44,7 +44,7 @@ function App() {
           <Route path="/jobs" component={Jobs} />
         </Switch>
       </Router>
-    </Provider>
+    </Provider >
   );
 }
 
