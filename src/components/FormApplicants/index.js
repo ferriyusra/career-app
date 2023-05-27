@@ -8,6 +8,8 @@ import {
   InputText,
   Button,
 } from "upkit";
+import { UploadOutlined } from '@ant-design/icons';
+import { Upload } from 'antd';
 
 const statusList = {
   idle: "idle",
@@ -22,7 +24,7 @@ export default function FormApplicants() {
 
   let { handleSubmit, register, errors, watch } = useForm();
   let [status, setStatus] = React.useState(statusList.idle);
-  const [resume, setResume] = React.useState({ preview: "", raw: "" });
+  const [resume, setResume] = React.useState([]);
 
   watch();
 
@@ -36,13 +38,19 @@ export default function FormApplicants() {
     }
   };
 
-  const onChangeHandler = (e) => {
-    if (e.target.files.length) {
-      setResume({
-        preview: URL.createObjectURL(e.target.files[0]),
-        raw: e.target.files[0]
-      });
-    }
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  }
+
+  const handleFileChange = ({ fileList }) => {
+    setResume(fileList);
+  };
+
+  const handleFileRemove = (file) => {
+    const newFileList = resume.filter((f) => f.uid !== file.uid);
+    setResume(newFileList);
   };
 
   const onSubmit = async (formHook) => {
@@ -53,7 +61,7 @@ export default function FormApplicants() {
       payload.append("lastName", formHook.lastName);
       payload.append("email", formHook.email);
       payload.append("phoneNumber", `62${formHook.phoneNumber}`);
-      payload.append('resume', resume.raw);
+      payload.append('resume', resume[0].originFileObj);
 
       await sendApplicants(jobId, payload);
 
@@ -119,33 +127,28 @@ export default function FormApplicants() {
                     />
                   </FormControl>
 
-                  <FormControl errorMessage={errors.resume?.message}>
-                    <input
-                      type="file"
+                  <FormControl
+                    errorMessage={errors.resume?.message}
+                  >
+                    <Upload
                       name="resume"
-                      ref={register(rules.resume)}
-                      onChange={onChangeHandler}
-                    />
+                      customRequest={dummyRequest}
+                      listType="picture"
+                      fileList={resume}
+                      onChange={handleFileChange}
+                      onRemove={handleFileRemove}
+                    >
+                      <Button
+                        size="medium"
+                        type="button"
+                        color="indigo"
+                        iconBefore={<UploadOutlined />}
+                        fitContainer
+                      >
+                        Upload CV Kamu
+                      </Button>
+                    </Upload>
                   </FormControl>
-                  <label htmlFor="upload-button">
-                    {resume.preview ? (
-                      <img
-                        src={resume.preview}
-                        alt="dummy"
-                        required
-                        width="300"
-                        height="300"
-                      />
-                    ) : (
-                      <>
-                        <span className="fa-stack fa-2x mt-3 mb-2">
-                          <i className="fas fa-circle fa-stack-2x" />
-                          <i className="fas fa-store fa-stack-1x fa-inverse" />
-                        </span>
-                        <h5 className="text-left">Upload your resume</h5>
-                      </>
-                    )}
-                  </label>
                   <br />
                   <Button
                     type="submit"
