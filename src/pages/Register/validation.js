@@ -1,22 +1,12 @@
 const rules = {
-  first_name: {
+  name: {
     required: {
       value: true,
-      message: "Nama depan harus diisi.",
+      message: "Nama perusahaan harus diisi.",
     },
     maxLength: {
       value: 100,
-      message: "Panjang nama depan maksimal 100 karakter.",
-    },
-  },
-  last_name: {
-    required: {
-      value: true,
-      message: "Nama belakang harus diisi.",
-    },
-    maxLength: {
-      value: 100,
-      message: "Panjang nama belakang maksimal 100 karakter.",
+      message: "Panjang Nama perusahaan maksimal 100 karakter.",
     },
   },
 
@@ -47,16 +37,37 @@ const rules = {
     },
   },
 
-  password_confirmation: {
+  passwordConfirmation: {
     required: {
       value: true,
       message: "Konfirmasi kata sandi harus diisi.",
     },
   },
 
-  // user_image_url: {
-  //   required: { value: true, message: "image tidak boleh kosong." },
-  // },
+  image: {
+    required: {
+      value: true,
+      message: "Image tidak boleh kosong."
+    },
+  },
+
+  location: {
+    required: {
+      value: true,
+      message: "Lokasi perusahaan tidak boleh kosong."
+    },
+  },
+
+  companyDescription: {
+    required: {
+      value: true,
+      message: "Deskripsi perusahaan tidak boleh kosong."
+    },
+    maxLength: {
+      value: 100,
+      message: "Panjang Deskripsi perusahaan maksimal 100 karakter.",
+    },
+  },
 };
 
 export { rules };

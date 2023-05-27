@@ -3,12 +3,14 @@ import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import { rules } from "./validation";
 import {
-  LayoutOne,
   FormControl,
   InputText,
   InputPassword,
   Button,
+  Textarea
 } from "upkit";
+import { UploadOutlined } from '@ant-design/icons';
+import { Upload } from 'antd';
 import { registerUser } from "../../api/auth";
 
 const statusList = {
@@ -19,39 +21,69 @@ const statusList = {
 };
 
 export default function Register() {
+
+  const [image, setImage] = React.useState([]);
   let { register, handleSubmit, errors, setError } = useForm();
   let [status, setStatus] = React.useState(statusList.idle);
 
   let history = useHistory();
 
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  }
+
+  const handleFileChange = ({ fileList }) => {
+    setImage(fileList);
+  };
+
+  const handleFileRemove = (file) => {
+    const newFileList = image.filter((f) => f.uid !== file.uid);
+    setImage(newFileList);
+  };
+
   const onSubmit = async (formData) => {
-    let { password, password_confirmation } = formData;
 
-    if (password !== password_confirmation) {
-      return setError("password_confirmation", {
-        type: "equality",
-        message: "Konfirmasi kata sandi harus sama dengan kata sandi",
-      });
-    }
+    try {
+      let {
+        name,
+        email,
+        location,
+        companyDescription,
+        password,
+        passwordConfirmation
+      } = formData;
 
-    setStatus(statusList.process);
-
-    let { data } = await registerUser(formData);
-
-    if (data.error) {
-      let fields = Object.keys(data.fields);
-
-      fields.forEach((field) => {
-        setError(field, {
-          type: "server",
-          message: data.fields[field]?.properties?.message,
+      if (password !== passwordConfirmation) {
+        return setError("passwordConfirmation", {
+          type: "equality",
+          message: "Konfirmasi kata sandi harus sama dengan kata sandi",
         });
-      });
-      setStatus(statusList.error);
-      return;
+      }
+
+      let payload = new FormData();
+      payload.append("name", name);
+      payload.append("password", password);
+      payload.append("location", location);
+      payload.append("companyDescription", companyDescription);
+      payload.append("email", email);
+      payload.append('image', image[0].originFileObj);
+
+      setStatus(statusList.process);
+
+      await registerUser(payload);
+
+      setStatus(statusList.success);
+      history.push("/register/success");
+
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setStatus(statusList.error);
+      } else {
+        setStatus(statusList.error);
+      }
     }
-    setStatus(statusList.success);
-    history.push("/register/berhasil");
   };
 
   return (
@@ -85,63 +117,85 @@ export default function Register() {
                 agar akun anda tetap aman.
               </p>
 
-              <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
-                <LayoutOne size="full">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <FormControl errorMessage={errors.first_name?.message}>
-                      <InputText
-                        name="first_name"
-                        placeholder="Nama depan"
-                        fitContainer
-                        ref={register(rules.first_name)}
-                      />
-                    </FormControl>
-                    <FormControl errorMessage={errors.last_name?.message}>
-                      <InputText
-                        name="last_name"
-                        placeholder="Nama belakang"
-                        fitContainer
-                        ref={register(rules.last_name)}
-                      />
-                    </FormControl>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <FormControl errorMessage={errors.name?.message}>
+                  <InputText
+                    name="name"
+                    placeholder="Nama Perusahaan"
+                    fitContainer
+                    ref={register(rules.name)}
+                  />
+                </FormControl>
 
-                    <FormControl errorMessage={errors.email?.message}>
-                      <InputText
-                        name="email"
-                        placeholder="Alamat email"
-                        fitContainer
-                        ref={register(rules.email)}
-                      />
-                    </FormControl>
+                <FormControl errorMessage={errors.email?.message}>
+                  <InputText
+                    name="email"
+                    placeholder="Alamat email"
+                    fitContainer
+                    ref={register(rules.email)}
+                  />
+                </FormControl>
 
-                    <FormControl errorMessage={errors.password?.message}>
-                      <InputPassword
-                        name="password"
-                        placeholder="Kata sandi"
-                        fitContainer
-                        ref={register(rules.password)}
-                      />
-                    </FormControl>
+                <FormControl errorMessage={errors.location?.message}>
+                  <InputText
+                    name="location"
+                    placeholder="Lokasi Perusahaan"
+                    fitContainer
+                    ref={register(rules.location)}
+                  />
+                </FormControl>
 
-                    <FormControl
-                      errorMessage={errors.password_confirmation?.message}
-                    >
-                      <InputPassword
-                        name="password_confirmation"
-                        placeholder="Konfirmasi kata sandi"
-                        fitContainer
-                        ref={register(rules.password_confirmation)}
-                      />
-                    </FormControl>
-                    <InputText
-                      type="hidden"
-                      name="role"
+                <FormControl errorMessage={errors.companyDescription?.message}>
+                  <Textarea
+                    name="companyDescription"
+                    placeholder="Deskripsi Perusahaan"
+                    fitContainer
+                    ref={register(rules.companyDescription)}
+                  />
+                </FormControl>
+
+                <FormControl errorMessage={errors.password?.message}>
+                  <InputPassword
+                    name="password"
+                    placeholder="Kata sandi"
+                    fitContainer
+                    ref={register(rules.password)}
+                  />
+                </FormControl>
+
+                <FormControl
+                  errorMessage={errors.passwordConfirmation?.message}
+                >
+                  <InputPassword
+                    name="passwordConfirmation"
+                    placeholder="Konfirmasi kata sandi"
+                    fitContainer
+                    ref={register(rules.passwordConfirmation)}
+                  />
+                </FormControl>
+
+                <FormControl
+                  errorMessage={errors.image?.message}
+                >
+                  <Upload
+                    name="image"
+                    customRequest={dummyRequest}
+                    listType="picture"
+                    fileList={image}
+                    onChange={handleFileChange}
+                    onRemove={handleFileRemove}
+                  >
+                    <Button
+                      size="medium"
+                      type="button"
+                      color="indigo"
+                      iconBefore={<UploadOutlined />}
                       fitContainer
-                      value="candidate"
-                      ref={register}
-                    />
-                  </form>
-                </LayoutOne>
+                    >
+                      Upload Logo Perusahaan
+                    </Button>
+                  </Upload>
+                </FormControl>
 
                 <Button
                   type="submit"
@@ -154,18 +208,19 @@ export default function Register() {
                     ? "Sedang memproses"
                     : "Mendaftar"}
                 </Button>
+
+                <p className="mt-8 text-center text-sm text-foot">
+                  Sudah punya akun ?
+                  <Link to="/login">
+                    {" "}
+                    <p className="font-medium hover:underline text-link">
+                      {" "}
+                      Masuk sekarang.{" "}
+                    </p>{" "}
+                  </Link>
+                </p>
               </form>
 
-              <p className="mt-8 text-center text-sm text-foot">
-                Sudah punya akun ?
-                <Link to="/login">
-                  {" "}
-                  <p className="font-medium hover:underline text-link">
-                    {" "}
-                    Masuk sekarang.{" "}
-                  </p>{" "}
-                </Link>
-              </p>
             </div>
           </div>
         </div>

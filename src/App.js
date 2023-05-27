@@ -29,7 +29,7 @@ function App() {
         <Switch>
 
           <Route path="/success-send-applicants" component={SendJobSuccess} />
-          <Route path="/register/berhasil" component={RegisterSuccess} />
+          <Route path="/register/success" component={RegisterSuccess} />
           <Route path="/register" component={Register} />
 
           <GuardRoute path="/logout">
