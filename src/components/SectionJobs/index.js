@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,22 +19,12 @@ import { Avatar, Card, Skeleton } from 'antd';
 
 export default function Jobs() {
 
-  const [loading, setLoading] = useState(true);
-
   let dispatch = useDispatch();
   let jobs = useSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(fetchJobs())
   }, [dispatch, jobs.page]);
-
-  console.log(jobs)
-
-  useEffect(() => {
-    if (jobs.status === "success") {
-      setLoading(false);
-    }
-  }, [jobs.status]);
 
   return (
     <>
@@ -75,7 +65,7 @@ export default function Jobs() {
             </div>
             <div className="grid items-center justify-center h-full border border-gray-400 divide-y divide-gray-400 lg:divide-y-0 md:divide-x md:grid-cols-12 rounded-3xl mt-5">
               {
-                loading || !jobs.data ? (
+                !jobs.data || jobs.data.length === 0 ? (
                   <>
                     {[...Array(6)].map((_, index) => (
                       <div className="w-full h-full md:col-span-6 lg:col-span-4" key={index}>
