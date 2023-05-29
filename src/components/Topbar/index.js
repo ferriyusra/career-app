@@ -45,7 +45,7 @@ export default function Topbar() {
           className="hidden lg:flex lg:items-center lg:w-auto w-full md:space-x-4"
           id="menu"
         >
-          <Link to={auth.user ? `/dashboard/jobs` : `/login`}>
+          <Link to={auth.user ? `/dashboard` : `/login`}>
             <button
               className="btn-outline md:w-auto w-full text-base items-center border-0 py-3 px-4 focus:outline-none rounded-full mt-6 lg:mt-0"
               style={{ textTransform: "capitalize" }}
