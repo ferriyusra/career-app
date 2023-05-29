@@ -8,9 +8,9 @@ export default function Topbar() {
   return (
     <div className="h-full w-full border-box transition-all duration-500 linear lg:px-16 md:px-12 px-4 py-6 bg-white">
       <div className="container mx-auto flex flex-wrap flex-row items-center justify-between">
-        <a href="" className="flex font-medium items-center">
+        <Link to="/" className="flex font-medium items-center">
           <img src="https://img.icons8.com/external-flat-wichaiwi/64/000000/external-job-workation-flat-wichaiwi.png" />
-        </a>
+        </Link>
         <label for="menu-toggle" className="cursor-pointer lg:hidden block">
           <svg
             className="w-6 h-6"
