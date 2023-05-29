@@ -21,7 +21,7 @@ export default function DetailJob() {
     getJobById(params?.jobId)
       .then(({ data }) => {
         if (data?.error) {
-          setError(data.message || "Terjadi kesalahan yang tidak diketahui");
+          setError(data.message || "Terjadi kesalahan");
         }
         setJob(data);
       })
@@ -29,7 +29,7 @@ export default function DetailJob() {
   }, [params]);
 
   if (error.length) {
-    return <h1>Terjadi kesalahan yang saya aja gatau salahnya apa</h1>;
+    return <h1>Terjadi kesalahan</h1>;
   }
 
   if (status === "process") {
@@ -125,7 +125,7 @@ export default function DetailJob() {
               />
             </div>
           </article>
-          <FormApplicants jobId={params?.id} />
+          <FormApplicants />
         </section>
       </div>
       <Footer />
