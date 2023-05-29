@@ -53,7 +53,7 @@ export default function Topbar() {
               {auth.user ? "Dashboard" : "Masuk"}
             </button>
           </Link>
-          <Link to={auth.user ? "/logout" : "register"}>
+          <Link to={auth.user ? "/logout" : "/register"}>
             <button className="btn-fill md:w-auto w-full py-3 px-4 text-white rounded-full bg-purple-1 transition-all duration-300 mt-6 lg:mt-0">
               {auth.user ? "Keluar" : "Daftar"}
             </button>
