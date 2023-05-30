@@ -13,6 +13,11 @@ import SendJobSuccess from "./pages/SendJobSuccess";
 
 import DetailJob from "./pages/DetailJob";
 
+// component dashboard
+import DashboardJob from "./pages/Dashboard/ManagementJob";
+// import CreateJob from "./pages/Dashboard/ManagementJob/CreateJob";
+// component dashboard
+
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./app/store";
@@ -27,6 +32,14 @@ function App() {
     <Provider store={store}>
       <Router>
         <Switch>
+          {/* routing company */}
+          <GuardRoute path="/dashboard/job">
+            <DashboardJob />
+          </GuardRoute>
+          {/* <GuardRoute path="/dashboard/create">
+            <Dashboard />
+          </GuardRoute> */}
+          {/* routing company */}
 
           <Route path="/success-send-applicants" component={SendJobSuccess} />
           <Route path="/register/success" component={RegisterSuccess} />
