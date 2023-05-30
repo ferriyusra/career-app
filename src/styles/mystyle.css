@@ -1,137 +1,137 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 :root {
-  --dark-1: #101d2e;
-  --dark-2: rgba(0, 0, 0, 0.55);
-  --dark-3: #1e2a39;
-  --purple-1: #7f31ff;
-  --purple-2: #8f00ff;
-  --grey-1: #626a7f;
-  --dark-1-1: #111f37;
-  --dark-2-1: #001d01;
-  --nogrey: #627492;
+	--dark-1: #101d2e;
+	--dark-2: rgba(0, 0, 0, 0.55);
+	--dark-3: #1e2a39;
+	--purple-1: #7f31ff;
+	--purple-2: #8f00ff;
+	--grey-1: #626a7f;
+	--dark-1-1: #111f37;
+	--dark-2-1: #001d01;
+	--nogrey: #627492;
 }
 .font-noto {
-  font-family: "Noto Sans", sans-serif;
+	font-family: 'Noto Sans', sans-serif;
 }
 .headerID__2 .font-montserrat {
-  font-family: "Montserrat", sans-serif;
+	font-family: 'Montserrat', sans-serif;
 }
 .headerID__2 .btn-outline {
-  border: 1px solid var(--purple-1);
-  color: var(--purple-1);
-  transition: 0.3s;
+	border: 1px solid var(--purple-1);
+	color: var(--purple-1);
+	transition: 0.3s;
 }
 .headerID__2 .btn-outline:hover {
-  background-color: var(--purple-1);
-  color: #ffffff;
-  transition: 0.3s;
+	background-color: var(--purple-1);
+	color: #ffffff;
+	transition: 0.3s;
 }
 .headerID__2 nav a.nav-link {
-  color: var(--dark-2);
-  font-weight: 500;
-  transition: 0.3s;
+	color: var(--dark-2);
+	font-weight: 500;
+	transition: 0.3s;
 }
 .headerID__2 nav a.nav-link:hover {
-  color: var(--dark-1);
-  transition: 0.3s;
+	color: var(--dark-1);
+	transition: 0.3s;
 }
 .headerID__2 nav a.nav-link.active {
-  color: var(--dark-1);
-  font-weight: 700;
+	color: var(--dark-1);
+	font-weight: 700;
 }
 .headerID__2 #menu-toggle:checked + #menu,
 .headerID__2 #menu-toggle:checked + #menu + #menu {
-  display: block;
+	display: block;
 }
 .headerID__2 .btn-fill:hover,
 .headerID__2 .btn-fill:hover {
-  background-color: var(--purple-2);
-  transition: 0.3s;
+	background-color: var(--purple-2);
+	transition: 0.3s;
 }
 .headerID__2 .bg-img {
-  background-image: none;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position-x: center;
+	background-image: none;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position-x: center;
 }
 .headerID__2 .bg-purple-1,
 .headerID__2 .bg-purple-1 {
-  background-color: var(--purple-1);
+	background-color: var(--purple-1);
 }
 .headerID__2 .text-dark-2 {
-  color: var(--dark-2);
+	color: var(--dark-2);
 }
 .headerID__2 .text-dark-3 {
-  color: var(--dark-3);
+	color: var(--dark-3);
 }
 .headerID__2 .text-grey-1 {
-  color: var(--grey-1);
+	color: var(--grey-1);
 }
 .headerID__2 .dropdown a.nav-dropdown-color {
-  color: var(--dark-1);
-  transition: 0.3s;
+	color: var(--dark-1);
+	transition: 0.3s;
 }
 .headerID__2 .dropdown-menu {
-  width: 250px;
-  --tw-shadow: 0 0px 20px 0 rgba(167, 167, 167, 0.1),
-    0 0px 20px 0 rgba(167, 167, 167, 0.06);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(167, 167, 167, 0)),
-    var(--tw-ring-shadow, 0 0 rgba(167, 167, 167, 0)), var(--tw-shadow);
+	width: 250px;
+	--tw-shadow: 0 0px 20px 0 rgba(167, 167, 167, 0.1),
+		0 0px 20px 0 rgba(167, 167, 167, 0.06);
+	box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(167, 167, 167, 0)),
+		var(--tw-ring-shadow, 0 0 rgba(167, 167, 167, 0)), var(--tw-shadow);
 }
 .headerID__2 .dropdown .dropdown-hover:hover {
-  background-color: #f9f5ff;
-  border-radius: 0.75rem;
+	background-color: #f9f5ff;
+	border-radius: 0.75rem;
 }
 @media (min-width: 425px) {
-  .headerID__2 .dropdown-menu {
-    width: 310px;
-  }
-  .headerID__2 .bg-img {
-    background-image: url(https://api.elements.buildwithangga.com/storage/files/2/assets/Header/Header-Talent-2/header-ornament.png);
-    background-position-y: 240px;
-  }
+	.headerID__2 .dropdown-menu {
+		width: 310px;
+	}
+	.headerID__2 .bg-img {
+		background-image: url(https://api.elements.buildwithangga.com/storage/files/2/assets/Header/Header-Talent-2/header-ornament.png);
+		background-position-y: 240px;
+	}
 }
 @media (min-width: 1024px) {
-  .headerID__2 .bg-img {
-    background-position-y: 160px;
-  }
-  .headerID__2 .dropdown:hover a {
-    color: var(--dark-1) !important;
-    transition: 0.3s;
-  }
-  .headerID__2 .dropdown a.nav-dropdown-color {
-    color: var(--dark-1);
-    transition: 0.3s;
-  }
-  .headerID__2 .dropdown:hover .dropdown-menu {
-    display: block;
-    z-index: 1;
-  }
+	.headerID__2 .bg-img {
+		background-position-y: 160px;
+	}
+	.headerID__2 .dropdown:hover a {
+		color: var(--dark-1) !important;
+		transition: 0.3s;
+	}
+	.headerID__2 .dropdown a.nav-dropdown-color {
+		color: var(--dark-1);
+		transition: 0.3s;
+	}
+	.headerID__2 .dropdown:hover .dropdown-menu {
+		display: block;
+		z-index: 1;
+	}
 }
 
 /* login or register */
 
 .content-4-1 .centered {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .content-4-1 .width-left {
-  width: 0%;
+	width: 0%;
 }
 
 .content-4-1 .width-right {
-  width: 100%;
+	width: 100%;
 }
 
 .content-4-1 .forgot-password {
-  color: #cacbce;
-  transition: 0.3s;
+	color: #cacbce;
+	transition: 0.3s;
 }
 
 .content-4-1 .forgot-password:hover {
-  color: #2a3240;
+	color: #2a3240;
 }
 
 /* .content-4-1 .btn-fill {
@@ -143,58 +143,67 @@
 } */
 
 .content-4-1 .bg-medium-white {
-  background-color: #fcfdff;
+	background-color: #fcfdff;
 }
 
 .content-4-1 .caption {
-  color: #a8adb7;
+	color: #a8adb7;
 }
 
 .content-4-1 .text-label {
-  color: #39465b;
+	color: #39465b;
 }
 
 .content-4-1 .text-foot {
-  color: #2a3240;
+	color: #2a3240;
 }
 
 .content-4-1 .text-link {
-  color: #4b0082;
+	color: #4b0082;
 }
 
 @media (min-width: 1024px) {
-  .content-4-1 .width-left {
-    width: 48%;
-  }
+	.content-4-1 .width-left {
+		width: 48%;
+	}
 
-  .content-4-1 .width-right {
-    width: 52%;
-  }
+	.content-4-1 .width-right {
+		width: 52%;
+	}
 }
 
 /* register success */
 .empty-4-4 .btn-view {
-  background-color: #6c5ecf;
-  transition: 0.3s;
+	background-color: #6c5ecf;
+	transition: 0.3s;
 }
 .empty-4-4 .btn-view:hover {
-  background-color: #7370ff;
-  transition: 0.3s;
+	background-color: #7370ff;
+	transition: 0.3s;
 }
 .empty-4-4 .caption-text {
-  color: #504f5e;
+	color: #504f5e;
 }
 
 /* jobs */
 
 .text-dark-1 {
-  color: var(--dark-1-1);
+	color: var(--dark-1-1);
 }
 
 .text-dark-2 {
-  color: var(--dark-2-1);
+	color: var(--dark-2-1);
 }
 
 .text-nogrey {
-  color: var(--nogrey);
+	color: var(--nogrey);
+}
+
+.custom-button {
+	display: flex;
+	align-items: center;
+}
+
+.custom-button .anticon {
+	margin-right: 4px; /* Adjust the margin as needed */
 }
