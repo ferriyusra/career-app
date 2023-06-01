@@ -62,6 +62,12 @@ export default function ListJobs() {
       key: 'jobSalary',
     },
     {
+      title: 'Job Salary Showing',
+      dataIndex: 'jobIsSalary',
+      key: 'jobIsSalary',
+      render: (jobIsSalary) => (jobIsSalary ? 'Gaji ditampilkan' : 'Gaji tidak ditampilkan')
+    },
+    {
       title: 'Job Type',
       dataIndex: 'jobType',
       key: 'jobType',
