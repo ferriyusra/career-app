@@ -28,7 +28,6 @@ export async function createJob(payload) {
     {
       headers: {
         authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       }
     });
 }
@@ -41,7 +40,6 @@ export async function updateJob(jobId, payload) {
     {
       headers: {
         authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       }
     });
 }
