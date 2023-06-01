@@ -1,39 +1,93 @@
-import React from 'react'
-// import DashboardTopbar from '../../../../components/Dashboard/DashboardTopBar';
-// import DashboardSidebarMenu from '../../../../components/Dashboard/DashboardSidebarMenu';
-// import DashboardFooter from '../../../../components/Dashboard/DashboardFooter';
-
+import React, { useState } from 'react';
+import moment from 'moment';
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
+import { rules } from "./validation";
 import { Layout } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   Button,
   Col,
   DatePicker,
   Drawer,
-  Form,
-  Input,
   Row,
-  Select,
   Space,
+  Select,
   Switch,
-  InputNumber
 } from 'antd';
-import { useState } from 'react';
+import {
+  FormControl,
+  InputText
+} from 'upkit';
+import { createJob } from '../../../../api/dashboard/job';
+
 const { Option } = Select;
 
+const statusList = {
+  idle: "idle",
+  process: "process",
+  success: "success",
+  error: "error",
+};
 
 export default function CreateJob() {
-
+  const [editorData, setEditorData] = useState(null);
+  const [jobType, setJobType] = useState('');
+  const [dateRange, setDateRange] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isSalary, setIsSalary] = useState(true);
+  const [status, setStatus] = useState(statusList.idle);
+  const history = useHistory();
+  const { handleSubmit, register, errors } = useForm();
+
   const showDrawer = () => {
     setOpen(true);
   };
+
   const onClose = () => {
     setOpen(false);
   };
 
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
+  const onChangeInputSalary = (checked) => {
+    setIsSalary(checked);
+  };
+
+  const handleDateRangeChange = (dates) => {
+    setDateRange(dates);
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      let {
+        name,
+        salary
+      } = data;
+
+      if (!salary) {
+        salary = 0;
+      }
+
+      const payload = {
+        name,
+        periodFromAt: dateRange[0].format(),
+        periodToAt: dateRange[1].format(),
+        jobType,
+        description: editorData,
+        isSalary,
+        salary
+      };
+
+      setStatus(statusList.process);
+
+      await createJob(payload);
+
+      setStatus(statusList.success);
+      history.push("/dashboard/job");
+    } catch (error) {
+      setStatus(statusList.error);
+    }
   };
 
   return (
@@ -54,121 +108,125 @@ export default function CreateJob() {
           bodyStyle={{
             paddingBottom: 80,
           }}
-          extra={
-            <Space>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button onClick={onClose} type="primary" ghost>
-                Submit
-              </Button>
-            </Space>
-          }
         >
-          <Form layout="vertical">
+          <form layout="vertical" onSubmit={handleSubmit(onSubmit)}>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item
-                  name="name"
-                  label="Job Name or Job Position"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter job name or job position',
-                    },
-                  ]}
-                >
-                  <Input placeholder="Please enter job name or job position" />
-                </Form.Item>
+                <FormControl
+                  label='Job Name or Job Position'
+                  color='black'
+                  errorMessage={errors.name?.message}>
+                  <InputText
+                    fitContainer
+                    name="name"
+                    placeholder="Please enter job name or job position"
+                    ref={register(rules.name)}
+                  />
+                </FormControl>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  name="periodFromAt"
-                  label="Period This Job Available"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please choose the dateTime',
-                    },
-                  ]}
+                <FormControl
+                  label='Job Period'
+                  color='black'
+                  errorMessage={errors.period?.message}
                 >
                   <DatePicker.RangePicker
                     style={{
                       width: '100%',
                     }}
                     getPopupContainer={(trigger) => trigger.parentElement}
+                    disabledDate={(current) => current && current < moment().startOf('day')}
+                    onChange={handleDateRangeChange}
                   />
-                </Form.Item>
+                </FormControl>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item
+                <FormControl
+                  color='black'
                   name="isSalary"
-                  label="Salary want to showing ?"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select an owner',
-                    },
-                  ]}
+                  label="Salary want to showing?"
                 >
-                  <Switch primary ghost defaultChecked onChange={onChange} />
-                </Form.Item>
+                  <Switch
+                    checkedChildren="show salary"
+                    unCheckedChildren="dont show salary"
+                    defaultChecked
+                    onChange={onChangeInputSalary}
+                  />
+                </FormControl>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  name="salary"
-                  label="Salary"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input salary',
-                    },
-                  ]}
-                >
-                  <InputNumber min={1000000} max={100000000} defaultValue={0} />
-                </Form.Item>
+                {isSalary && (
+                  <FormControl
+                    label="Salary"
+                    color='black'
+                  >
+                    <InputText
+                      fitContainer
+                      placeholder='Please input the salary'
+                      name='salary'
+                      ref={register(rules.salary)}
+                    />
+                  </FormControl>
+                )}
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item
+                <FormControl
                   name="jobType"
                   label="Job Type"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please choose the job type available',
-                    },
-                  ]}
+                  color='black'
+                  errorMessage={errors.jobType?.message}
                 >
-                  <Select placeholder="Please choose the job type available">
+                  <Select
+                    name="jobType"
+                    placeholder="Please choose the job type available"
+                    onChange={value => setJobType(value)}
+                    value={jobType}
+                  >
                     <Option value="full time">Full Time</Option>
                     <Option value="contract">Contract</Option>
                     <Option value="freelance">Freelance</Option>
                     <Option value="internship">Internship</Option>
                   </Select>
-                </Form.Item>
+                </FormControl>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-                <Form.Item
+                <FormControl
                   name="description"
-                  label="Description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'please enter url description',
-                    },
-                  ]}
+                  label="Description about the job"
+                  color='black'
                 >
-                  <Input.TextArea rows={4} placeholder="please enter url description" />
-                </Form.Item>
+                  <CKEditor
+                    name="description"
+                    editor={ClassicEditor}
+                    data={editorData}
+                    onChange={(_event, editor) => {
+                      const data = editor.getData();
+                      setEditorData(data);
+                    }}
+                  />
+                </FormControl>
               </Col>
             </Row>
-          </Form>
+            <Space>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button
+                htmlType="submit"
+                disabled={status === statusList.process}
+                type="primary"
+                ghost
+              >
+                {status === statusList.process ? "Submit Process" : "Submit"}
+              </Button>
+            </Space>
+          </form>
         </Drawer>
       </Layout>
     </>
-  )
+  );
 }

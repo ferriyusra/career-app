@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import moment from "moment";
 import { Link } from 'react-router-dom'
 import { DeleteOutlined } from '@ant-design/icons';
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { Pagination } from "upkit";
 import { Layout, Button, Input, Table, Space, message, Popconfirm } from "antd";
 import { useDispatch, useSelector } from "react-redux";
