@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment';
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { rules } from "./validation";
 import { Layout } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
@@ -39,8 +40,17 @@ export default function CreateJob() {
   const [open, setOpen] = useState(false);
   const [isSalary, setIsSalary] = useState(true);
   const [status, setStatus] = useState(statusList.idle);
-  const history = useHistory();
   const { handleSubmit, register, errors } = useForm();
+
+  const notifCreate = () => toast.success('Create Job Success !', {
+    position: toast.POSITION.BOTTOM_RIGHT,
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: null,
+  });
 
   const showDrawer = () => {
     setOpen(true);
@@ -84,7 +94,9 @@ export default function CreateJob() {
       await createJob(payload);
 
       setStatus(statusList.success);
-      history.push("/dashboard/job");
+      notifCreate();
+      onClose();
+      window.location.reload();
     } catch (error) {
       setStatus(statusList.error);
     }
