@@ -1,6 +1,8 @@
 import {
   UserOutlined,
+  SolutionOutlined,
   LogoutOutlined,
+  BookOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React from 'react';
@@ -19,12 +21,12 @@ export default function DashboardMenu() {
         />
       </div>
       <Menu theme="light" mode="vertical" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1" icon={<UserOutlined />} title="Dashboard">
+        <Menu.Item key="1" icon={<BookOutlined />} title="Dashboard">
           <Link to="/dashboard/job">
             Manage Job
           </Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined />} title="Profile">
+        <Menu.Item key="2" icon={<SolutionOutlined />} title="Profile">
           Manage Applicants
         </Menu.Item>
         <Menu.Item key="3" icon={<UserOutlined />} title="Settings">
