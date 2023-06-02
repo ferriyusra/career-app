@@ -107,6 +107,9 @@ export default function ListJobs() {
     notifDelete();
     setDeletestatus(1);
     message.success('Delete Success');
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
   const cancel = (e) => {
@@ -140,14 +143,14 @@ export default function ListJobs() {
         <div style={{ flex: 1 }}>
           <CreateJob />
         </div>
-        <div style={{ marginLeft: 'auto', marginRight: 16 }}>
+        {/* <div style={{ marginLeft: 'auto', marginRight: 16 }}>
           <Search
             placeholder="Cari Pekerjaan..."
             enterButton={<SearchOutlined />}
             style={{ width: 200, maxWidth: '100%' }}
             size="large"
           />
-        </div>
+        </div> */}
       </div>
 
       <ToastContainer
