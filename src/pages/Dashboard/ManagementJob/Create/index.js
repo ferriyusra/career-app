@@ -94,9 +94,9 @@ export default function CreateJob() {
       await createJob(payload);
 
       setStatus(statusList.success);
-      notifCreate();
       onClose();
-      window.location.reload();
+      notifCreate();
+      // window.location.reload();
     } catch (error) {
       setStatus(statusList.error);
     }
