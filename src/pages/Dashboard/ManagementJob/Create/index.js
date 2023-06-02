@@ -42,15 +42,21 @@ export default function CreateJob() {
   const [status, setStatus] = useState(statusList.idle);
   const { handleSubmit, register, errors } = useForm();
 
-  const notifCreate = () => toast.success('Create Job Success !', {
-    position: toast.POSITION.BOTTOM_RIGHT,
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: null,
-  });
+  const notifCreate = () => {
+    toast.success('Create Job Success !', {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: null,
+    });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
 
   const showDrawer = () => {
     setOpen(true);
@@ -96,7 +102,6 @@ export default function CreateJob() {
       setStatus(statusList.success);
       onClose();
       notifCreate();
-      // window.location.reload();
     } catch (error) {
       setStatus(statusList.error);
     }

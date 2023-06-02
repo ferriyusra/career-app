@@ -107,9 +107,6 @@ export default function ListJobs() {
     notifDelete();
     setDeletestatus(1);
     message.success('Delete Success');
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
   };
 
   const cancel = (e) => {
@@ -117,15 +114,21 @@ export default function ListJobs() {
     message.error('Delete Cancel');
   };
 
-  const notifDelete = () => toast.success('Delete Job Success !', {
-    position: toast.POSITION.BOTTOM_RIGHT,
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: null,
-  });
+  const notifDelete = () => {
+    toast.success('Delete Job Success !', {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: null,
+    });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
 
   let dispatch = useDispatch();
   let dashboardJobs = useSelector((state) => state.dashboardJobs);
