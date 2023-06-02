@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import moment from "moment";
 import { Link } from 'react-router-dom'
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
 import { Pagination } from "upkit";
 import { Layout, Button, Input, Table, Space, message, Popconfirm } from "antd";
@@ -77,12 +77,12 @@ export default function ListJobs() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Link to={`/dashboard/edit-job/${record.id}`}>
+          <Link to={`/dashboard/update-job/${record.id}`}>
             <Button
               ghost
               type="primary"
               className="custom-button"
-              icon={<DeleteOutlined />}>
+              icon={<EditOutlined />}>
               Update Job
             </Button>
           </Link>

@@ -15,7 +15,7 @@ import DetailJob from "./pages/DetailJob";
 
 // component dashboard
 import DashboardJob from "./pages/Dashboard/ManagementJob";
-// import CreateJob from "./pages/Dashboard/ManagementJob/CreateJob";
+import UpdateJob from "./pages/Dashboard/ManagementJob/Update";
 // component dashboard
 
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
@@ -36,9 +36,9 @@ function App() {
           <GuardRoute path="/dashboard/job">
             <DashboardJob />
           </GuardRoute>
-          {/* <GuardRoute path="/dashboard/create">
-            <Dashboard />
-          </GuardRoute> */}
+          <GuardRoute path="/dashboard/update-job/:jobId">
+            <UpdateJob />
+          </GuardRoute>
           {/* routing company */}
 
           <Route path="/success-send-applicants" component={SendJobSuccess} />
