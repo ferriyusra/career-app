@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
+import BounceLoader from 'react-spinners/BounceLoader';
 import moment from 'moment';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouteMatch, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { rules } from "./validation";
-import { updateJob } from '../../../../api/dashboard/job';
+import { updateJob, getJobById } from '../../../../api/dashboard/job';
 import {
   Layout,
   Button,
@@ -18,6 +20,7 @@ import {
   Switch,
 } from 'antd';
 import {
+  LayoutOne,
   FormControl,
   InputText
 } from 'upkit';
@@ -38,12 +41,18 @@ const statusList = {
 
 export default function UpdateJob() {
 
+  const [job, setJob] = useState(null);
+  let [error, setError] = useState('');
   const [editorData, setEditorData] = useState(null);
-  const [jobType, setJobType] = useState('');
+  const [jobType, setJobType] = useState([]);
   const [dateRange, setDateRange] = useState([]);
-  const [status, setStatus] = useState(statusList.idle);
+  const [status, setStatus] = useState(statusList.process);
   const [isSalary, setIsSalary] = useState(true);
-  const { handleSubmit, register, errors, setValue, watch, getValue } = useForm();
+  let { handleSubmit, register, errors, setValue, watch, getValues } = useForm();
+  const { params } = useRouteMatch();
+  let history = useHistory();
+
+  watch();
 
   const notifEdit = () => {
     toast.success('Edit Job Success !', {
@@ -69,12 +78,40 @@ export default function UpdateJob() {
     setDateRange(dates);
   };
 
-  const onSubmit = async (data) => {
+  useEffect(() => {
+
+    getJobById(params?.jobId)
+      .then((data) => {
+        if (data.error) {
+          setError(data.message || "Terjadi kesalahan");
+        }
+
+        setJob(data);
+        setValue('name', data.data.data.jobName);
+        setValue('periodFromAt', data.data.data.jobPeriodFrom);
+        setValue('periodToAt', data.data.data.jobPeriodTo);
+        setValue('jobType', data.data.data.jobType);
+        setValue('description', data.data.data.jobDescription);
+        setValue('isSalary', data.data.data.jobIsSalary);
+        setValue('salary', data.data.data.salary ? data.data.data.salary : 0);
+      })
+      .finally(() => setStatus('idle'));
+
+    register(
+      {
+        name: 'name',
+      },
+      rules.name
+    );
+
+  }, [params, register, setValue]);
+
+  const onSubmit = async (formData) => {
     try {
       let {
         name,
         salary
-      } = data;
+      } = formData;
 
       if (!salary) {
         salary = 0;
@@ -92,14 +129,25 @@ export default function UpdateJob() {
 
       setStatus(statusList.process);
 
-      await updateJob(payload);
+      await updateJob(job.id, payload);
 
       setStatus(statusList.success);
       notifEdit();
+      history.push('/dashboard/job')
     } catch (error) {
       setStatus(statusList.error);
     }
   };
+
+  if (status === 'process') {
+    return <LayoutOne>
+      <div className="text-center py-10">
+        <div className="inline-block">
+          <BounceLoader color="red" />
+        </div>
+      </div>
+    </LayoutOne>
+  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -123,6 +171,7 @@ export default function UpdateJob() {
                       fitContainer
                       name="name"
                       placeholder="Please enter job name or job position"
+                      value={getValues().name}
                       ref={register(rules.name)}
                     />
                   </FormControl>
@@ -140,6 +189,7 @@ export default function UpdateJob() {
                       getPopupContainer={(trigger) => trigger.parentElement}
                       disabledDate={(current) => current && current < moment().startOf('day')}
                       onChange={handleDateRangeChange}
+                      defaultValue={[getValues().periodFromAt, getValues().periodToAt]}
                     />
                   </FormControl>
                 </Col>
@@ -170,6 +220,7 @@ export default function UpdateJob() {
                         placeholder='Please input the salary'
                         name='salary'
                         ref={register(rules.salary)}
+                        value={getValues().salary}
                       />
                     </FormControl>
                   )}
