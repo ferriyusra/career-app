@@ -1,6 +1,5 @@
 import React from "react";
 import Topbar from "../../components/Topbar";
-import Footer from "../../components/Footer";
 import SectionJobs from '../../components/SectionJobs';
 import SectionLandingHero from "../../components/SectionLandingHero";
 
@@ -14,7 +13,6 @@ export default function Home() {
           <SectionJobs />
         </main>
       </section>
-      <Footer />
     </>
   );
 }
