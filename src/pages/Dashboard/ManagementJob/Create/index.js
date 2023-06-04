@@ -35,7 +35,7 @@ const statusList = {
 
 export default function CreateJob() {
   const [editorData, setEditorData] = useState(null);
-  const [jobType, setJobType] = useState('');
+  const [jobType, setJobType] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [open, setOpen] = useState(false);
   const [isSalary, setIsSalary] = useState(true);
