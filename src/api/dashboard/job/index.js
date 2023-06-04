@@ -17,7 +17,16 @@ export async function jobs(params) {
 }
 
 export async function getJobById(jobId) {
-  return await axios.get(`${config.api_host}/crm/v1/jobs${jobId}`);
+
+  let { token } = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')) : {};
+
+  if (!token) return;
+
+  return await axios.get(`${config.api_host}/crm/v1/job/${jobId}`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
 }
 
 export async function createJob(payload) {
