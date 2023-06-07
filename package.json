@@ -15,6 +15,7 @@
 		"axios": "^0.26.0",
 		"debounce-promise": "^3.1.2",
 		"dotenv": "^16.0.0",
+		"formik": "^2.4.1",
 		"moment": "^2.29.1",
 		"postcss": "^8.4.7",
 		"react": "^16.13.0",
@@ -31,7 +32,8 @@
 		"redux-thunk": "^2.4.1",
 		"tailwindcss": "^3.0.23",
 		"upkit": "^0.18.0",
-		"web-vitals": "^2.1.4"
+		"web-vitals": "^2.1.4",
+		"yup": "^1.2.0"
 	},
 	"scripts": {
 		"build:styles": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
