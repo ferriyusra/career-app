@@ -7,8 +7,8 @@ import moment from "moment";
 import { Link } from 'react-router-dom'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
-import { Pagination } from "upkit";
-import { Layout, Button, Input, Table, Space, message, Popconfirm } from "antd";
+// import { Pagination } from "upkit";
+import { Layout, Button, Input, Table, Space, message, Popconfirm, Pagination } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchJobs,
@@ -28,7 +28,7 @@ export default function ListJobs() {
       title: 'No.',
       dataIndex: 'counter',
       key: 'counter',
-      render: (_, __, index) => index + 1,
+      render: (_, __, index) => (dashboardJobs.page - 1) * dashboardJobs.perPage + index + 1,
     },
     {
       title: 'Job Name',
@@ -178,6 +178,14 @@ export default function ListJobs() {
         loading={isLoading} />
       <div style={{ marginTop: 16, textAlign: "right" }}>
         <Pagination
+          current={dashboardJobs.page}
+          pageSize={dashboardJobs.perPage}
+          total={dashboardJobs.total}
+          onChange={(current) => dispatch(setPerPage(current))}
+        />
+
+        {/* pagination using upkit component
+        <Pagination
           color="blue"
           totalItems={dashboardJobs.total}
           page={dashboardJobs.page}
@@ -185,7 +193,7 @@ export default function ListJobs() {
           onChange={(page) => dispatch(setPerPage(page))}
           onNext={(_) => dispatch(goToNextPage())}
           onPrev={(_) => dispatch(goToPrevPage())}
-        />
+        /> */}
       </div>
 
     </Content>
