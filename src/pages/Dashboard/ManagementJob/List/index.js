@@ -140,6 +140,8 @@ export default function ListJobs() {
 
   const isLoading = !dashboardJobs.data;
 
+  const totalItems = isLoading ? 0 : dashboardJobs.data.length;
+
   return (
     <Content style={{ padding: 24, background: "#FFFFFF", color: "black" }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
@@ -182,6 +184,7 @@ export default function ListJobs() {
           pageSize={dashboardJobs.perPage}
           total={dashboardJobs.total}
           onChange={(current) => dispatch(setPerPage(current))}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${totalItems} items`}
         />
 
         {/* pagination using upkit component
