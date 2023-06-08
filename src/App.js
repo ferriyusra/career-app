@@ -14,6 +14,7 @@ import SendJobSuccess from "./pages/SendJobSuccess";
 import DetailJob from "./pages/DetailJob";
 
 // component dashboard
+import DashboardApplicant from "./pages/Dashboard/ManagementApplicant";
 import DashboardJob from "./pages/Dashboard/ManagementJob";
 import UpdateJob from "./pages/Dashboard/ManagementJob/Update";
 // component dashboard
@@ -33,11 +34,14 @@ function App() {
       <Router>
         <Switch>
           {/* routing company */}
-          <GuardRoute path="/dashboard/job">
-            <DashboardJob />
-          </GuardRoute>
           <GuardRoute path="/dashboard/update-job/:jobId">
             <UpdateJob />
+          </GuardRoute>
+          <GuardRoute path="/dashboard/applicants">
+            <DashboardApplicant />
+          </GuardRoute>
+          <GuardRoute path="/dashboard/job">
+            <DashboardJob />
           </GuardRoute>
           {/* routing company */}
 
