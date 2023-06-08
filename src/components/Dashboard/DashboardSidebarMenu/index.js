@@ -1,4 +1,5 @@
 import {
+  FolderOutlined,
   UserOutlined,
   SolutionOutlined,
   LogoutOutlined,
@@ -25,7 +26,12 @@ export default function DashboardMenu() {
       label: "Manage Applicants",
       icon: <SolutionOutlined />
     },
-    // { key: "3", path: "/dashboard/update-job/:jobId", label: "Update Job", icon: <UserOutlined /> },
+    {
+      key: "3",
+      path: "/jobs",
+      label: "Jobs",
+      icon: <FolderOutlined />
+    },
   ];
 
   return (
