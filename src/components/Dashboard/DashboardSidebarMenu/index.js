@@ -17,7 +17,7 @@ export default function DashboardMenu() {
     {
       key: "1",
       path: "/dashboard/job",
-      label: "Manage Job",
+      label: "Manage Jobs",
       icon: <BookOutlined />
     },
     {
