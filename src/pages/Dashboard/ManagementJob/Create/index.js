@@ -206,6 +206,11 @@ export default function CreateJob() {
                         unCheckedChildren="dont show salary"
                         defaultChecked
                         onChange={onChangeInputSalary}
+                        style={{
+                          backgroundColor: '#4096ff',
+                          borderColor: '#e8e8e8',
+                          color: '#999999',
+                        }}
                       />
                     </FormControl>
                   </Col>
