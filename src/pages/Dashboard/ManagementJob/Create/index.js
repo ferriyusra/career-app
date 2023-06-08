@@ -34,10 +34,11 @@ export default function CreateJob() {
   const validationSchema = Yup.object().shape(
     {
       name: Yup.string().required('Job Name is required'),
-      period: Yup.array().required('Job Period is required'),
+      period: Yup.array()
+        .required('Job Period is required')
+        .min(1, 'Job Period is required'),
       jobType: Yup.string().required('Job Type is required'),
-      // description: Yup.string().required('Job Description is required'),
-      salary: Yup.number().typeError('Salary must be a number').required('Salary is required').positive('Salary must be positive'),
+      salary: Yup.number().typeError('Salary must be a number').positive('Salary must be positive'),
     }
   );
 
@@ -47,6 +48,10 @@ export default function CreateJob() {
   const [open, setOpen] = useState(false);
   const [isSalary, setIsSalary] = useState(true);
   const [status, setStatus] = useState(statusList.idle);
+
+  const dateAdapter = (dates) => {
+    return dates.map((date) => date.toDate());
+  };
 
   const notifCreate = () => {
     toast.success('Create Job Success!', {
@@ -176,8 +181,14 @@ export default function CreateJob() {
                         }}
                         inputReadOnly
                         getPopupContainer={(trigger) => trigger.parentElement}
-                        disabledDate={(current) => current && current < moment().startOf('day')}
-                        onChange={handleDateRangeChange}
+                        disabledDate={(current) =>
+                          current && current < moment().startOf('day')
+                        }
+                        onChange={(dates) => {
+                          setFieldValue('period', dateAdapter(dates));
+                          handleDateRangeChange(dates);
+                        }}
+                        value={dateRange}
                       />
                     </FormControl>
                   </Col>
