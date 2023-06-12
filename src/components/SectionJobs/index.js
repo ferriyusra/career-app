@@ -15,7 +15,7 @@ import {
 import Footer from "../../components/Footer";
 
 import { Pagination, InputText, ButtonCircle } from "upkit";
-import { Avatar, Card, Skeleton } from 'antd';
+import { Avatar, Card, Skeleton, } from 'antd';
 
 export default function Jobs() {
 

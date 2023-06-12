@@ -64,8 +64,8 @@ const rules = {
       message: "Deskripsi perusahaan tidak boleh kosong."
     },
     maxLength: {
-      value: 100,
-      message: "Panjang Deskripsi perusahaan maksimal 100 karakter.",
+      value: 10000,
+      message: "Panjang Deskripsi perusahaan maksimal 10000 karakter.",
     },
   },
 };
