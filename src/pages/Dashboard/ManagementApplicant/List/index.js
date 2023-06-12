@@ -162,14 +162,14 @@ export default function ListApplicants() {
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
         <div style={{ flex: 1 }}>
         </div>
-        <div style={{ marginLeft: 'auto', marginRight: 16 }}>
+        {/* <div style={{ marginLeft: 'auto', marginRight: 16 }}>
           <Search
             placeholder="Search Name Applicant or Job..."
             enterButton={<SearchOutlined />}
             style={{ width: 200, maxWidth: '100%' }}
             size="large"
           />
-        </div>
+        </div> */}
       </div>
 
       <ToastContainer

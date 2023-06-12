@@ -41,7 +41,7 @@ export default function Jobs() {
             </div>
           </div>
           <div className="w-full text-center mt-5">
-            <InputText
+            {/* <InputText
               iconBefore={
                 <ButtonCircle
                   size="small"
@@ -56,7 +56,7 @@ export default function Jobs() {
               onChange={(e) => {
                 dispatch(setKeyword(e.target.value));
               }}
-            />
+            /> */}
           </div>
           <div>
             {" "}
