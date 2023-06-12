@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function SectionLandingHero() {
   return (
@@ -12,7 +13,7 @@ export default function SectionLandingHero() {
           </div>
           <div className="mt-6 mb-14">
             <p className="text-grey-1 text-xl text-center leading-7">
-              GetShayna is a 100% free resource for companies
+              100% free post a job for companies
               <br className="hidden md:block" />
               looking to find remote talent across the globe. No
               <br className="hidden md:block" />
@@ -20,11 +21,11 @@ export default function SectionLandingHero() {
             </p>
           </div>
           <div className="inline-block py-5 px-8 rounded-full bg-purple-1 btn-fill transition-all duration-300">
-            <a href="#" className="">
+            <Link to="/register" className="">
               <span className="text-white text-center text-xl">
-                Join ReadyTal
+                Join As Companies
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

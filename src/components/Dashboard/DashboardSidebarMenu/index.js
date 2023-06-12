@@ -36,12 +36,10 @@ export default function DashboardMenu() {
 
   return (
     <Sider theme="light" breakpoint="lg" collapsedWidth="0">
-      <div style={{ height: 32, background: "#fff", margin: "16px" }}>
-        <img
-          src="/path/to/your/logo.png"
-          alt="Logo"
-          style={{ height: "100%", width: "auto" }}
-        />
+      <div style={{ height: 72, background: "#fff", margin: "16px" }}>
+        <Link to="/">
+          <img src="https://img.icons8.com/external-flat-wichaiwi/64/000000/external-job-workation-flat-wichaiwi.png" />
+        </Link>
       </div>
       <Menu theme="light" mode="vertical" selectedKeys={[location.pathname]}>
         {menuItems.map((item) => (
