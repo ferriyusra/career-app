@@ -103,7 +103,7 @@ export default function CreateJob() {
         periodFromAt: dateRange[0].format(),
         periodToAt: dateRange[1].format(),
         jobType,
-        description: description,
+        description,
         isSalary,
         salary,
       };

@@ -77,7 +77,7 @@ export default function ListJobs() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          {/* <Link to={`/dashboard/update-job/${record.id}`}>
+          <Link to={`/dashboard/update-job/${record.id}`}>
             <Button
               ghost
               type="primary"
@@ -85,7 +85,7 @@ export default function ListJobs() {
               icon={<EditOutlined />}>
               Update Job
             </Button>
-          </Link> */}
+          </Link>
           <Popconfirm
             title="Delete this job ?"
             description="Are you sure to delete this job?"

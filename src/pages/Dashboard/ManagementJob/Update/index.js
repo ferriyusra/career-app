@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import BounceLoader from 'react-spinners/BounceLoader';
-import moment from 'moment';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useRouteMatch, useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { rules } from "./validation";
-import { updateJob, getJobById } from '../../../../api/dashboard/job';
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import moment from "moment";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {
   Layout,
   Button,
@@ -18,16 +15,19 @@ import {
   Space,
   Select,
   Switch,
-} from 'antd';
+  Input,
+} from "antd";
 import {
   LayoutOne,
   FormControl,
-  InputText
-} from 'upkit';
+} from "upkit";
+import { updateJob, getJobById } from "../../../../api/dashboard/job";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import DashboardTopbar from '../../../../components/Dashboard/DashboardTopBar';
-import DashboardSidebarMenu from '../../../../components/Dashboard/DashboardSidebarMenu';
-import DashboardFooter from '../../../../components/Dashboard/DashboardFooter';
+import DashboardTopbar from "../../../../components/Dashboard/DashboardTopBar";
+import DashboardSidebarMenu from "../../../../components/Dashboard/DashboardSidebarMenu";
+import DashboardFooter from "../../../../components/Dashboard/DashboardFooter";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -40,22 +40,29 @@ const statusList = {
 };
 
 export default function UpdateJob() {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Job Name is required"),
+    period: Yup.array()
+      .required("Job Period is required")
+      .min(1, "Job Period is required"),
+    jobType: Yup.string().required("Job Type is required"),
+    salary: Yup.number()
+      .typeError("Salary must be a number")
+      .positive("Salary must be positive"),
+  });
 
   const [job, setJob] = useState(null);
-  let [error, setError] = useState('');
-  const [editorData, setEditorData] = useState(null);
-  const [jobType, setJobType] = useState([]);
+  const [description, setEditorData] = useState("");
+  const [jobType, setJobType] = useState("");
   const [dateRange, setDateRange] = useState([]);
-  const [status, setStatus] = useState(statusList.process);
   const [isSalary, setIsSalary] = useState(true);
-  let { handleSubmit, register, errors, setValue, watch, getValues } = useForm();
+  const [status, setStatus] = useState(statusList.idle);
+
   const { params } = useRouteMatch();
   let history = useHistory();
 
-  watch();
-
   const notifEdit = () => {
-    toast.success('Edit Job Success !', {
+    toast.success("Edit Job Success !", {
       position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 5000,
       hideProgressBar: true,
@@ -74,44 +81,34 @@ export default function UpdateJob() {
     setIsSalary(checked);
   };
 
+  const dateAdapter = (dates) => {
+    return dates.map((date) => date.toDate());
+  };
+
   const handleDateRangeChange = (dates) => {
-    setDateRange(dates);
+    const adaptedDates = dateAdapter(dates);
+    setDateRange(adaptedDates);
+  };
+
+  const handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    setEditorData(data);
   };
 
   useEffect(() => {
-
     getJobById(params?.jobId)
-      .then((data) => {
-        if (data.error) {
-          setError(data.message || "Terjadi kesalahan");
+      .then(({ data }) => {
+        if (data?.data?.erorr) {
+          throw new Error(data.data.message || "Terjadi kesalahan");
         }
-
-        setJob(data);
-        setValue('name', data.data.data.jobName);
-        setValue('periodFromAt', data.data.data.jobPeriodFrom);
-        setValue('periodToAt', data.data.data.jobPeriodTo);
-        setValue('jobType', data.data.data.jobType);
-        setValue('description', data.data.data.jobDescription);
-        setValue('isSalary', data.data.data.jobIsSalary);
-        setValue('salary', data.data.data.salary ? data.data.data.salary : 0);
+        setJob(data.data);
       })
       .finally(() => setStatus('idle'));
-
-    register(
-      {
-        name: 'name',
-      },
-      rules.name
-    );
-
-  }, [params, register, setValue]);
+  }, [params]);
 
   const onSubmit = async (formData) => {
     try {
-      let {
-        name,
-        salary
-      } = formData;
+      let { name, salary } = formData;
 
       if (!salary) {
         salary = 0;
@@ -122,9 +119,9 @@ export default function UpdateJob() {
         periodFromAt: dateRange[0].format(),
         periodToAt: dateRange[1].format(),
         jobType,
-        description: editorData,
+        description,
         isSalary,
-        salary
+        salary,
       };
 
       setStatus(statusList.process);
@@ -133,20 +130,22 @@ export default function UpdateJob() {
 
       setStatus(statusList.success);
       notifEdit();
-      history.push('/dashboard/job')
+      history.push("/dashboard/job");
     } catch (error) {
       setStatus(statusList.error);
     }
   };
 
-  if (status === 'process') {
-    return <LayoutOne>
-      <div className="text-center py-10">
-        <div className="inline-block">
-          <BounceLoader color="red" />
+  if (status === "process") {
+    return (
+      <LayoutOne>
+        <div className="text-center py-10">
+          <div className="inline-block">
+            <ScaleLoader color="blue" />
+          </div>
         </div>
-      </div>
-    </LayoutOne>
+      </LayoutOne>
+    );
   }
 
   return (
@@ -154,133 +153,168 @@ export default function UpdateJob() {
       <DashboardSidebarMenu />
       <Layout>
         <DashboardTopbar />
-        <Layout >
+        <Layout>
           <Content
             style={{
-              margin: '24px 16px 0',
+              margin: "24px 16px 0",
             }}
           >
-            <form layout="vertical" onSubmit={handleSubmit(onSubmit)}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <FormControl
-                    label='Job Name or Job Position'
-                    color='black'
-                    errorMessage={errors.name?.message}>
-                    <InputText
-                      fitContainer
-                      name="name"
-                      placeholder="Please enter job name or job position"
-                      value={getValues().name}
-                      ref={register(rules.name)}
-                    />
-                  </FormControl>
-                </Col>
-                <Col span={12}>
-                  <FormControl
-                    label='Job Period'
-                    color='black'
-                    errorMessage={errors.period?.message}
-                  >
-                    <DatePicker.RangePicker
-                      style={{
-                        width: '100%',
-                      }}
-                      getPopupContainer={(trigger) => trigger.parentElement}
-                      disabledDate={(current) => current && current < moment().startOf('day')}
-                      onChange={handleDateRangeChange}
-                      defaultValue={[getValues().periodFromAt, getValues().periodToAt]}
-                    />
-                  </FormControl>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <FormControl
-                    color='black'
-                    name="isSalary"
-                    label="Salary want to showing?"
-                  >
-                    <Switch
-                      checkedChildren="show salary"
-                      unCheckedChildren="dont show salary"
-                      defaultChecked
-                      onChange={onChangeInputSalary}
-                    />
-                  </FormControl>
-                </Col>
-                <Col span={12}>
-                  {isSalary && (
-                    <FormControl
-                      label="Salary"
-                      color='black'
-                    >
-                      <InputText
-                        fitContainer
-                        placeholder='Please input the salary'
-                        name='salary'
-                        ref={register(rules.salary)}
-                        value={getValues().salary}
-                      />
-                    </FormControl>
-                  )}
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <FormControl
-                    name="jobType"
-                    label="Job Type"
-                    color='black'
-                    errorMessage={errors.jobType?.message}
-                  >
-                    <Select
-                      name="jobType"
-                      placeholder="Please choose the job type available"
-                      onChange={value => setJobType(value)}
-                      value={jobType}
-                    >
-                      <Option value="full time">Full Time</Option>
-                      <Option value="contract">Contract</Option>
-                      <Option value="freelance">Freelance</Option>
-                      <Option value="internship">Internship</Option>
-                    </Select>
-                  </FormControl>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={24}>
-                  <FormControl
-                    name="description"
-                    label="Description about the job"
-                    color='black'
-                  >
-                    <CKEditor
-                      name="description"
-                      editor={ClassicEditor}
-                      data={editorData}
-                      onChange={(_event, editor) => {
-                        const data = editor.getData();
-                        setEditorData(data);
-                      }}
-                    />
-                  </FormControl>
-                </Col>
-              </Row>
-              <Space>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  ghost
-                >
-                  Submit
-                </Button>
-              </Space>
-            </form>
+            {job && (
+              <Formik
+                initialValues={{
+                  name: job?.jobName,
+                  period: [moment(job?.periodFromAt), moment(job?.periodToAt)],
+                  isSalary: job?.isSalary,
+                  salary: job?.salary,
+                  jobType: job?.jobType,
+                  description: job?.description,
+                }}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+              >
+                {({ values, handleSubmit, setFieldValue, errors, touched }) => (
+                  <Form layout="vertical" onSubmit={handleSubmit}>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <FormControl
+                          label="Job Name or Job Position"
+                          color="black"
+                          errorMessage={
+                            errors && errors.name && touched.name && errors.name
+                          }
+                        >
+                          <Field
+                            as={Input}
+                            name="name"
+                            placeholder="Please enter job name or job position"
+                          />
+                        </FormControl>
+                      </Col>
+                      <Col span={12}>
+                        <FormControl
+                          label="Job Period"
+                          color="black"
+                          errorMessage={errors && errors.period && touched.period && errors.period}
+                        >
+                          <DatePicker.RangePicker
+                            style={{ width: "100%" }}
+                            inputReadOnly
+                            getPopupContainer={(trigger) => trigger.parentElement}
+                            disabledDate={(current) => current && current < moment().startOf("day")}
+                            onChange={(dates) => {
+                              handleDateRangeChange(dates);
+                            }}
+                            value={dateRange}
+                          />
+                        </FormControl>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <FormControl
+                          color="black"
+                          label="Salary want to showing?"
+                          errorMessage={errors && errors.isSalary && touched.salary && errors.isSalary}
+
+                        >
+                          <Switch
+                            checkedChildren="show salary"
+                            unCheckedChildren="dont show salary"
+                            defaultChecked
+                            onChange={onChangeInputSalary}
+                            style={{
+                              backgroundColor: '#4096ff',
+                              borderColor: '#e8e8e8',
+                              color: '#999999',
+                            }}
+                          />
+                        </FormControl>
+                      </Col>
+                      <Col span={12}>
+                        {isSalary && (
+                          <FormControl
+                            label="Salary"
+                            color="black"
+                            errorMessage={errors && errors.salary && touched.salary && errors.salary}
+                          >
+                            <Field
+                              as={Input}
+                              placeholder="Please input the salary"
+                              name="salary"
+                            />
+                          </FormControl>
+                        )}
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <FormControl
+                          label="Job Type"
+                          color="black"
+                          errorMessage={
+                            errors && errors.jobType && touched.jobType && errors.jobType
+                          }
+                        >
+                          <Field
+                            style={{
+                              width: '100%',
+                            }}
+                            as={Select}
+                            name="jobType"
+                            placeholder="Please choose the job type available"
+                            onChange={(value) => {
+                              setFieldValue('jobType', value);
+                              setJobType(value);
+                            }}
+                            value={values.jobType}
+                          >
+                            <Option value="full time">Full Time</Option>
+                            <Option value="contract">Contract</Option>
+                            <Option value="freelance">Freelance</Option>
+                            <Option value="internship">Internship</Option>
+                          </Field>
+                        </FormControl>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <FormControl
+                          label="Description about the job"
+                          color="black"
+                          errorMessage={
+                            errors && errors.description && touched.description && errors.description
+                          }
+                        >
+                          <CKEditor
+                            name="description"
+                            editor={ClassicEditor}
+                            data={description}
+                            onChange={handleEditorChange}
+                          />
+                        </FormControl>
+                      </Col>
+                    </Row>
+                    <Space>
+                      <Link to="/dashboard/job">
+                        <Button>Cancel</Button>
+                      </Link>
+                      <Button
+                        htmlType="submit"
+                        disabled={status === statusList.process}
+                        type="primary"
+                        ghost
+                      >
+                        {status === statusList.process ? 'Update Process' : 'Update'}
+                      </Button>
+                    </Space>
+                  </Form>
+                )}
+              </Formik>
+            )}
           </Content>
+          <DashboardFooter />
         </Layout>
-        <DashboardFooter />
       </Layout>
     </Layout>
-  )
+  );
 }
